@@ -1,13 +1,29 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Lightbulb } from 'lucide-react';
 import WelcomeBanner from '@/components/WelcomeBanner';
 import MentorBot from '@/components/MentorBot';
 import JourneyProgress from '@/components/JourneyProgress';
 import QuickSummary from '@/components/QuickSummary';
+import IntroductionModal from '@/components/IntroductionModal';
 
 const Index = () => {
+  const [showIntroduction, setShowIntroduction] = useState(false);
+
+  useEffect(() => {
+    // Check if user has seen the introduction before
+    const hasSeenIntro = localStorage.getItem('hasSeenIntroduction');
+    if (!hasSeenIntro) {
+      setShowIntroduction(true);
+    }
+  }, []);
+
+  const handleCloseIntroduction = () => {
+    setShowIntroduction(false);
+    localStorage.setItem('hasSeenIntroduction', 'true');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-teal-50/30">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -83,6 +99,12 @@ const Index = () => {
         {/* MentorBot - Fixed position */}
         <MentorBot />
       </div>
+
+      {/* Introduction Modal */}
+      <IntroductionModal 
+        isOpen={showIntroduction} 
+        onClose={handleCloseIntroduction} 
+      />
     </div>
   );
 };
